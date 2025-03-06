@@ -1,0 +1,134 @@
+import pyttsx3
+import speech_recognition as sr
+import datetime
+import os
+import wikipedia
+import pywhatkit
+import pyautogui
+import pyjokes
+
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+def WakeupCommands():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Orion is sleeping...")
+        r.pause_threshold = 1
+        r.adjust_for_ambient_noise(source, duration=1)
+        audio = r.listen(source)
+
+    try:
+        query = r.recognize_google(audio, language='en-in')
+        return query.lower()
+    except Exception:
+        return ""
+
+
+def commands():
+    r=sr.Recognizer()
+    with sr.Microphone()as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        r.adjust_for_ambient_noise(source, duration=1)
+        audio = r.listen(source)
+
+    try:
+        print("Wait for few seconds...")
+        query = r.recognize_google(audio, language='en-in')
+        print(f"You just said: {query}\n")
+
+    except Exception as e:
+        print(e)
+        speak("Say that again please...")
+        query = "none"
+    return query
+
+
+def wishings():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        print("Good Morning Sir !")
+        speak("Good Morning Sir !")
+    elif hour>=12 and hour<18:
+        print("Good Afternoon Sir !")
+        speak("Good Afternoon Sir !")    
+    elif hour>=18 and hour<21:
+        speak("Good Evening Sir !")
+        print("Good Evening Sir !")
+    else:
+        print("Good Night Sir !")
+        speak("Good Night Sir !")
+
+
+if __name__ == "__main__": 
+    while True:
+        query = WakeupCommands()
+        if 'wake up' in query:
+            wishings()
+            speak("What can I do for you ?")
+
+        while True:
+            query = commands().lower()
+            if 'time' in query:
+                strTime = datetime.datetime.now().strftime("%H:%M:%S")
+                print(strTime)
+                speak(f"Sir, the time is {strTime}")
+            
+            elif 'open brave' in query:
+                speak("Opening Brave Browser Sir...")
+                os.startfile("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe")
+
+            elif 'open discord' in query:
+                speak("Opening Discord Sir...")
+                os.startfile("C:\\Users\\Utilisateur\\AppData\\Local\\Discord\\Update.exe --processStart Discord.exe")
+
+            elif 'open league' in query:
+                speak("Opening league of legends Sir...")
+                os.startfile("C:\\Riot Games\\League of Legends\\LeagueClient.exe")
+
+            elif 'hop on the gate' in query:
+                speak("Opening Baldur's Gate 3 Sir...")
+                os.startfile("")
+
+            elif 'wikipedia' in query:
+                speak("Searching in the data base...")
+                try:
+                    query =  query.replace("wikipedia", "")
+                    results = wikipedia.summary(query, sentences=2)
+                    speak("According to Wikipedia,")
+                    print(results)
+                    speak(results)
+                except Exception as e:
+                    print(e)
+                    speak("Sorry Sir, I am not able to find the information from the database...")
+
+            elif 'play' in query:
+                query = query.replace("play", "")
+                speak(f"Playing {query} on youtube...")
+                pywhatkit.playonyt(query)
+
+            elif 'type' in query:
+                speak("What should I type Sir ?")
+                while True:
+                    writeInNotepad = commands()
+                    if writeInNotepad == 'exit Typing':
+                        speak ("Done Sir !")
+                    else:
+                        pyautogui.write(writeInNotepad)
+
+            elif 'joke' in query:
+                joke = pyjokes.get_joke()
+                print(joke)
+                speak(joke)
+
+            elif 'exit program' in query:
+                speak("Turning off Sir !")
+                quit()
+   
