@@ -1,6 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 import datetime
+import os
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -52,3 +53,7 @@ if __name__ == "__main__":
         strTime = datetime.datetime.now().strftime("%H:%M:%S")
         print(strTime)
         speak(f"Sir, the time is {strTime}")
+    
+    elif 'open Brave' in query:
+        speak("Opening Brave Browser Sir...")
+        os.startfile("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe")
