@@ -1,11 +1,11 @@
-import pyttsx3
-import speech_recognition as sr
-import datetime
-import os
-import wikipedia
-import pywhatkit
-import pyautogui
-import pyjokes
+import pyttsx3 #Comment here
+import speech_recognition as sr #Comment here
+import datetime #Comment here
+import os   #Comment here
+import wikipedia #Comment here
+import pywhatkit  #Comment here
+import pyautogui #Comment here
+import pyjokes #Comment here
 
 
 engine = pyttsx3.init('sapi5')
@@ -29,6 +29,10 @@ def WakeupCommands():
         return query.lower()
     except Exception:
         return ""
+    
+def sleep_mode():
+    speak("Rest mode activated, see you soon Sir !")
+    print("Orion is going to sleep...")
 
 
 def commands():
@@ -69,7 +73,7 @@ def wishings():
 
 if __name__ == "__main__": 
     while True:
-        query = WakeupCommands()
+        query = WakeupCommands().lower()
         if 'wake up' in query:
             wishings()
             speak("What can I do for you ?")
@@ -102,7 +106,7 @@ if __name__ == "__main__":
                     try:
                         query =  query.replace("wikipedia", "")
                         results = wikipedia.summary(query, sentences=2)
-                        speak("According to Wikipedia,")
+                        speak("According to my research,")
                         print(results)
                         speak(results)
                     except Exception as e:
@@ -127,6 +131,9 @@ if __name__ == "__main__":
                     joke = pyjokes.get_joke()
                     print(joke)
                     speak(joke)
+
+                elif 'rest' in query:
+                    sleep_mode()
 
                 elif 'exit program' in query:
                     speak("Turning off Sir !")
